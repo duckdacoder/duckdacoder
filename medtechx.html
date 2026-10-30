@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PULSE — Fusion Fest · MedTech · SDG 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0E17;
+    --bg-panel: #10162A;
+    --violet: #7B61FF;
+    --amber: #FFB020;
+    --ink: #EDEFF5;
+    --ink-dim: #8A93AC;
+    --line: rgba(237,239,245,0.09);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    overflow-x:hidden;
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk', sans-serif;
+    letter-spacing:-0.02em;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.02em;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(10,14,23,0.75);
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.1rem;}
+  .brand-dot{width:9px; height:9px; border-radius:50%; background:var(--amber); box-shadow:0 0 12px var(--amber);}
+  nav .links{display:flex; gap:32px; font-size:0.9rem; color:var(--ink-dim);}
+  nav .links a:hover{color:var(--ink);}
+  .cta-small{
+    background:var(--violet); color:#fff; padding:10px 20px; border-radius:8px;
+    font-size:0.85rem; font-weight:600;
+  }
+
+  /* HERO */
+  header.hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding-top:72px;
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:'';
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 700px 500px at 78% 30%, rgba(123,97,255,0.16), transparent 60%),
+      radial-gradient(ellipse 500px 400px at 15% 80%, rgba(255,176,32,0.08), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap:40px; align-items:center;
+    width:100%; position:relative; z-index:2;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:0.75rem;
+    color:var(--amber); border:1px solid rgba(255,176,32,0.3);
+    padding:7px 14px; border-radius:100px; margin-bottom:24px;
+    background:rgba(255,176,32,0.06);
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 5.2vw, 4.4rem);
+    font-weight:700; line-height:1.03;
+    margin-bottom:24px;
+  }
+  .hero h1 .accent{color:var(--violet);}
+  .hero p.sub{
+    font-size:1.15rem; color:var(--ink-dim); max-width:480px; margin-bottom:36px;
+  }
+  .hero-actions{display:flex; gap:16px; align-items:center;}
+  .btn-primary{
+    background:var(--violet); color:#fff; padding:16px 30px; border-radius:10px;
+    font-weight:600; font-size:0.95rem; display:inline-block;
+    box-shadow:0 0 0 rgba(123,97,255,0.4);
+    transition:box-shadow .25s ease, transform .25s ease;
+  }
+  .btn-primary:hover{box-shadow:0 0 32px rgba(123,97,255,0.45); transform:translateY(-1px);}
+  .btn-ghost{
+    color:var(--ink); border:1px solid var(--line); padding:16px 26px; border-radius:10px;
+    font-size:0.95rem; font-weight:500;
+  }
+  .btn-ghost:hover{border-color:rgba(237,239,245,0.3);}
+
+  /* ORBIT SIGNATURE */
+  .orbit-stage{
+    position:relative; width:100%; aspect-ratio:1/1; max-width:460px; margin:0 auto;
+  }
+  .ring{
+    position:absolute; border-radius:50%; border:1px solid var(--line);
+  }
+  .ring.r1{inset:0;}
+  .ring.r2{inset:14%;}
+  .ring.r3{inset:28%; border:1px solid rgba(123,97,255,0.25);}
+  .core{
+    position:absolute; inset:38%;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #1c2540, #0d1120);
+    border:1px solid rgba(123,97,255,0.3);
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column;
+    box-shadow: inset 0 0 40px rgba(123,97,255,0.15), 0 0 60px rgba(123,97,255,0.08);
+  }
+  .core .num{font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--amber);}
+  .core .lbl{font-family:'IBM Plex Mono'; font-size:0.6rem; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.1em;}
+  .dose{
+    position:absolute; width:38px; height:38px; border-radius:50%;
+    background:var(--bg-panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono'; font-size:0.62rem; color:var(--ink-dim);
+    animation: spin 26s linear infinite;
+    transform-origin: center;
+  }
+  .dose.filled{
+    background:rgba(255,176,32,0.14); border-color:var(--amber); color:var(--amber);
+    box-shadow:0 0 16px rgba(255,176,32,0.35);
+  }
+  .dose-inner{animation: counter-spin 26s linear infinite;}
+  .dose.d1{ animation-delay:0s; }
+  .dose.d2{ animation-delay:-6.5s; }
+  .dose.d3{ animation-delay:-13s; }
+  .dose.d4{ animation-delay:-19.5s; }
+
+  @keyframes spin{ from{ transform: rotate(0deg) translateX(230px) rotate(0deg); } to{ transform: rotate(360deg) translateX(230px) rotate(-360deg);} }
+  @keyframes counter-spin{ from{transform:rotate(0deg);} to{transform:rotate(-360deg);} }
+
+  @media (max-width:900px){
+    .dose{ animation-name: spinSmall; }
+    @keyframes spinSmall{ from{ transform: rotate(0deg) translateX(140px) rotate(0deg);} to{ transform: rotate(360deg) translateX(140px) rotate(-360deg);} }
+  }
+
+  /* SECTION SHARED */
+  section{padding:120px 0;}
+  .kicker{
+    font-family:'IBM Plex Mono'; font-size:0.75rem; color:var(--violet);
+    text-transform:uppercase; letter-spacing:0.12em; margin-bottom:14px;
+  }
+  h2.section-title{
+    font-size:clamp(1.8rem, 3.4vw, 2.6rem); font-weight:600; max-width:640px; margin-bottom:20px;
+  }
+  p.section-sub{color:var(--ink-dim); max-width:560px; font-size:1.05rem;}
+
+  /* PROBLEM STATS */
+  .stat-row{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+    margin-top:56px;
+  }
+  .stat{background:var(--bg-panel); padding:38px 32px;}
+  .stat .big{font-family:'Space Grotesk'; font-size:2.6rem; font-weight:700; color:var(--amber);}
+  .stat .cap{color:var(--ink-dim); font-size:0.9rem; margin-top:8px;}
+
+  /* HOW IT WORKS - timeline */
+  .timeline{
+    position:relative; margin-top:70px; padding-left:2px;
+  }
+  .timeline::before{
+    content:''; position:absolute; left:29px; top:8px; bottom:8px; width:1px;
+    background:linear-gradient(var(--violet), transparent);
+  }
+  .t-item{
+    position:relative; padding-left:76px; padding-bottom:52px;
+  }
+  .t-item:last-child{padding-bottom:0;}
+  .t-time{
+    position:absolute; left:0; top:0; width:60px; height:60px; border-radius:50%;
+    background:var(--bg-panel); border:1px solid rgba(123,97,255,0.4);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono'; font-size:0.7rem; color:var(--violet);
+  }
+  .t-item h3{font-size:1.2rem; margin-bottom:8px;}
+  .t-item p{color:var(--ink-dim); max-width:520px;}
+
+  /* SDG9 BAND */
+  .sdg-band{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:20px;
+    padding:56px; margin-top:20px;
+    display:grid; grid-template-columns:auto 1fr; gap:40px; align-items:center;
+  }
+  .sdg-tag{
+    width:96px; height:96px; border-radius:14px; background:var(--amber);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    color:#0A0E17; flex-shrink:0;
+  }
+  .sdg-tag .n{font-family:'Space Grotesk'; font-weight:700; font-size:1.8rem; line-height:1;}
+  .sdg-tag .t{font-size:0.55rem; text-align:center; margin-top:4px; font-weight:600; letter-spacing:0.02em;}
+  .sdg-band h3{font-size:1.3rem; margin-bottom:10px;}
+  .sdg-band p{color:var(--ink-dim);}
+
+  /* EVENT / FUSION FEST STRIP */
+  .fest-strip{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:40px 0;
+  }
+  .fest-strip .wrap{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+  }
+  .fest-strip .item{display:flex; flex-direction:column; gap:4px;}
+  .fest-strip .item .k{font-family:'IBM Plex Mono'; font-size:0.7rem; color:var(--ink-dim); text-transform:uppercase;}
+  .fest-strip .item .v{font-family:'Space Grotesk'; font-weight:600; font-size:1.1rem;}
+
+  /* TEAM */
+  .team-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:24px; margin-top:56px;
+  }
+  .member{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:26px;
+  }
+  .member .avatar{
+    width:44px; height:44px; border-radius:50%;
+    background:linear-gradient(135deg, var(--violet), var(--amber));
+    margin-bottom:16px;
+  }
+  .member .name{font-weight:600;}
+  .member .role{color:var(--ink-dim); font-size:0.85rem; margin-top:2px;}
+
+  /* CLOSING CTA */
+  .closing{
+    text-align:center; padding:140px 0 100px;
+    position:relative;
+  }
+  .closing h2{font-size:clamp(2rem,4.4vw,3.2rem); max-width:700px; margin:0 auto 28px;}
+  .closing p{color:var(--ink-dim); max-width:480px; margin:0 auto 40px;}
+
+  /* TRY NOW DEMO */
+  .demo-wrap{max-width:520px; margin:0 auto;}
+  .demo-card{
+    display:none;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:18px;
+    padding:32px; margin-top:36px; text-align:left;
+    box-shadow:0 0 60px rgba(123,97,255,0.08);
+  }
+  .demo-card.open{display:block; animation: fadeUp .4s ease;}
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  .demo-field{margin-bottom:18px;}
+  .demo-field label{
+    display:block; font-family:'IBM Plex Mono'; font-size:0.7rem; color:var(--ink-dim);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;
+  }
+  .search-row{position:relative;}
+  .search-row input[type="text"]{
+    width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; color:var(--ink); font-family:'Inter'; font-size:0.95rem;
+  }
+  .search-row input[type="text"]:focus{outline:none; border-color:var(--violet);}
+  .time-row{display:flex; gap:10px;}
+  .time-row select{
+    flex:1; background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:14px 10px; color:var(--ink); font-family:'IBM Plex Mono'; font-size:0.9rem;
+    appearance:none; text-align:center;
+  }
+  .time-row select:focus{outline:none; border-color:var(--violet);}
+  .btn-add{
+    width:100%; background:var(--violet); color:#fff; border:none; border-radius:10px;
+    padding:15px; font-weight:600; font-size:0.95rem; cursor:pointer; margin-top:6px;
+    transition:box-shadow .25s ease, transform .25s ease;
+  }
+  .btn-add:hover{box-shadow:0 0 32px rgba(123,97,255,0.45); transform:translateY(-1px);}
+  .reminder-list{margin-top:24px; display:flex; flex-direction:column; gap:10px;}
+  .reminder-item{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; animation: fadeUp .3s ease;
+  }
+  .reminder-item .med{font-weight:600; font-size:0.92rem;}
+  .reminder-item .time{
+    font-family:'IBM Plex Mono'; font-size:0.8rem; color:var(--amber);
+    background:rgba(255,176,32,0.1); padding:4px 10px; border-radius:100px;
+  }
+  .reminder-empty{color:var(--ink-dim); font-size:0.85rem; text-align:center; padding:10px 0;}
+
+  footer{
+    border-top:1px solid var(--line); padding:40px 0; text-align:center;
+    color:var(--ink-dim); font-size:0.85rem;
+  }
+
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;}
+    .orbit-stage{order:-1; max-width:320px;}
+    .stat-row{grid-template-columns:1fr;}
+    .sdg-band{grid-template-columns:1fr; text-align:center;}
+    .sdg-tag{margin:0 auto;}
+    nav .links{display:none;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .dose{animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="brand-dot"></span>PULSE</div>
+    <div class="links">
+      <a href="#problem">Why</a>
+      <a href="#how">How it works</a>
+      <a href="#sdg">SDG 9</a>
+      <a href="#team">Team</a>
+    </div>
+    <a href="#cta" class="cta-small">See the pitch</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">FUSION FEST · MEDTECH TRACK · SDG 9</div>
+      <h1>Medicine, on time,<br>every time — <span class="accent">for elders</span> who shouldn't have to remember.</h1>
+      <p class="sub">PULSE is a connected dosage ring that dispenses, reminds, and alerts family when a dose is missed — built for Fusion Fest's MedTech challenge under Industry, Innovation & Infrastructure.</p>
+      <div class="hero-actions">
+        <a href="#how" class="btn-primary">How it works</a>
+        <a href="#team" class="btn-ghost">Meet the team</a>
+      </div>
+    </div>
+    <div class="orbit-stage">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="dose filled d1"><div class="dose-inner">08:00</div></div>
+      <div class="dose d2"><div class="dose-inner">13:00</div></div>
+      <div class="dose filled d3"><div class="dose-inner">18:00</div></div>
+      <div class="dose d4"><div class="dose-inner">22:00</div></div>
+      <div class="core">
+        <div class="num">2/4</div>
+        <div class="lbl">Doses Taken Today</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="kicker">The problem</div>
+    <h2 class="section-title">Missed doses aren't a small mistake. For elders managing chronic conditions, they're the difference between stable and hospitalized.</h2>
+    <p class="section-sub">Non-adherence quietly drives some of the most preventable hospital readmissions among elderly patients — and most of it comes down to simply forgetting, or losing track of a schedule.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="big">50%</div><div class="cap">of elderly patients don't take medication exactly as prescribed</div></div>
+      <div class="stat"><div class="big">4</div><div class="cap">average number of daily medications for adults over 65</div></div>
+      <div class="stat"><div class="big">1 in 5</div><div class="cap">hospital readmissions linked back to missed or incorrect dosing</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="kicker">How PULSE works</div>
+    <h2 class="section-title">One ring, one rhythm — a physical dosage cycle a caregiver can see across the room.</h2>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="t-time">01</div>
+        <h3>Load once a week</h3>
+        <p>A caregiver or pharmacist loads the week's doses into color-coded chambers — no daily setup required.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-time">02</div>
+        <h3>Ring lights, then rings</h3>
+        <p>At each scheduled time the chamber glows first, then chimes — giving a visual cue before an audible one, gentler for hearing-impaired users.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-time">03</div>
+        <h3>Dispense on a simple press</h3>
+        <p>One press releases exactly that dose. No counting, no second-guessing which pill is which.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-time">04</div>
+        <h3>Family gets notified if missed</h3>
+        <p>If a dose isn't taken within its window, a text goes to a designated family member or caregiver — closing the loop without needing an app open all day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sdg">
+  <div class="wrap">
+    <div class="kicker">Alignment</div>
+    <h2 class="section-title">Built against SDG 9 — Industry, Innovation & Infrastructure.</h2>
+    <div class="sdg-band">
+      <div class="sdg-tag"><div class="n">09</div><div class="t">INDUSTRY INNOVATION INFRASTRUCTURE</div></div>
+      <div>
+        <h3>Resilient, low-cost health infrastructure for aging populations</h3>
+        <p>PULSE targets SDG 9's push for accessible, sustainable technology infrastructure by putting a low-cost, low-maintenance adherence device within reach of home caregivers — not just hospitals — extending health infrastructure into the household.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fest-strip">
+  <div class="wrap">
+    <div class="item"><span class="k mono">Event</span><span class="v">Fusion Fest 2026</span></div>
+    <div class="item"><span class="k mono">Track</span><span class="v">MedTech · SDG 9</span></div>
+    <div class="item"><span class="k mono">Project</span><span class="v">PULSE</span></div>
+    <div class="item"><span class="k mono">Status</span><span class="v">In development</span></div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="wrap">
+    <div class="kicker">The team</div>
+    <h2 class="section-title">Built by the team behind PULSE for Fusion Fest.</h2>
+    <div class="team-grid">
+      <div class="member"><div class="avatar"></div><div class="name">D Derrick</div><div class="role">Web Designer</div></div>
+      <div class="member"><div class="avatar"></div><div class="name">Vishwanth K Nidhi</div><div class="role">Web Designer</div></div>
+      <div class="member"><div class="avatar"></div><div class="name">K Praveen</div><div class="role">Web Designer</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="cta">
+  <div class="kicker" style="justify-content:center; display:flex;">Fusion Fest · MedTech</div>
+  <h2>PULSE keeps the rhythm, so no one has to remember alone.</h2>
+  <p>Built for Fusion Fest under SDG 9 — Industry, Innovation & Infrastructure.</p>
+
+  <div class="demo-wrap">
+    <button class="btn-primary" id="tryNowBtn" onclick="toggleDemo()">Try Now</button>
+
+    <div class="demo-card" id="demoCard">
+      <div class="demo-field">
+        <label>Search medicine name</label>
+        <div class="search-row">
+          <input type="text" id="medName" list="medList" placeholder="e.g. Paracetamol, Metformin, Amoxicillin...">
+          <datalist id="medList">
+            <!-- Comprehensive Master Medicine List -->
+            <option value="Acetaminophen">
+            <option value="Acyclovir">
+            <option value="Adalimumab">
+            <option value="Albuterol">
+            <option value="Alemtuzumab">
+            <option value="Alendronate">
+            <option value="Allopurinol">
+            <option value="Alprazolam">
+            <option value="Amlodipine">
+            <option value="Amoxicillin">
+            <option value="Ampicillin">
+            <option value="Anastrozole">
+            <option value="Aspirin">
+            <option value="Atenolol">
+            <option value="Atorvastatin">
+            <option value="Azathioprine">
+            <option value="Azithromycin">
+            <option value="Baclofen">
+            <option value="Benazepril">
+            <option value="Benzonatate">
+            <option value="Betamethasone">
+            <option value="Bivalirudin">
+            <option value="Budesonide">
+            <option value="Buprenorphine">
+            <option value="Bupropion">
+            <option value="Buspirone">
+            <option value="Calcitriol">
+            <option value="Canagliflozin">
+            <option value="Candesartan">
+            <option value="Captopril">
+            <option value="Carbamazepine">
+            <option value="Carbidopa-Levodopa">
+            <option value="Carvedilol">
+            <option value="Cefdinir">
+            <option value="Cefalexin">
+            <option value="Celecoxib">
+            <option value="Cetirizine">
+            <option value="Chlorpheniramine">
+            <option value="Chlorthalidone">
+            <option value="Ciprofloxacin">
+            <option value="Citalopram">
+            <option value="Clarithromycin">
+            <option value="Clindamycin">
+            <option value="Clobetasol">
+            <option value="Clonazepam">
+            <option value="Clonidine">
+            <option value="Clopidogrel">
+            <option value="Codeine">
+            <option value="Colchicine">
+            <option value="Cyclobenzaprine">
+            <option value="Dapagliflozin">
+            <option value="Desloratadine">
+            <option value="Dexamethasone">
+            <option value="Dexmethylphenidate">
+            <option value="Diazepam">
+            <option value="Diclofenac">
+            <option value="Dicyclomine">
+            <option value="Digoxin">
+            <option value="Diltiazem">
+            <option value="Diphenhydramine">
+            <option value="Divalproex">
+            <option value="Donepezil">
+            <option value="Doxazosin">
+            <option value="Doxycycline">
+            <option value="Duloxetine">
+            <option value="Empagliflozin">
+            <option value="Enalapril">
+            <option value="Escitalopram">
+            <option value="Esomeprazole">
+            <option value="Ezetimibe">
+            <option value="Famotidine">
+            <option value="Felodipine">
+            <option value="Fenofibrate">
+            <option value="Fentanyl">
+            <option value="Fexofenadine">
+            <option value="Finasteride">
+            <option value="Fluconazole">
+            <option value="Fluoxetine">
+            <option value="Fluticasone">
+            <option value="Folic Acid">
+            <option value="Furosemide">
+            <option value="Gabapentin">
+            <option value="Gemfibrozil">
+            <option value="Glimepiride">
+            <option value="Glipizide">
+            <option value="Glyburide">
+            <option value="Haloperidol">
+            <option value="Hydralazine">
+            <option value="Hydrochlorothiazide">
+            <option value="Hydrocodone">
+            <option value="Hydrocortisone">
+            <option value="Hydroxychloroquine">
+            <option value="Hydroxyzine">
+            <option value="Ibuprofen">
+            <option value="Imatinib">
+            <option value="Indomethacin">
+            <option value="Insulin Glargine">
+            <option value="Insulin Lispro">
+            <option value="Ipratropium">
+            <option value="Irbesartan">
+            <option value="Isosorbide Mononitrate">
+            <option value="Ketoconazole">
+            <option value="Ketorolac">
+            <option value="Labetalol">
+            <option value="Lactulose">
+            <option value="Lamotrigine">
+            <option value="Lansoprazole">
+            <option value="Letanoprost">
+            <option value="Levetiracetam">
+            <option value="Levocetirizine">
+            <option value="Levofloxacin">
+            <option value="Levothyroxine">
+            <option value="Lidocaine">
+            <option value="Linagliptin">
+            <option value="Liraglutide">
+            <option value="Lisinopril">
+            <option value="Lithium">
+            <option value="Loperamide">
+            <option value="Loratadine">
+            <option value="Lorazepam">
+            <option value="Losartan">
+            <option value="Lovastatin">
+            <option value="Meclizine">
+            <option value="Meloxicam">
+            <option value="Memantine">
+            <option value="Metformin">
+            <option value="Methocarbamol">
+            <option value="Methotrexate">
+            <option value="Methylphenidate">
+            <option value="Methylprednisolone">
+            <option value="Metoclopramide">
+            <option value="Metoprolol">
+            <option value="Metronidazole">
+            <option value="Minocycline">
+            <option value="Mirtazapine">
+            <option value="Montelukast">
+            <option value="Morphine">
+            <option value="Mupirocin">
+            <option value="Naproxen">
+            <option value="Nebivolol">
+            <option value="Nfedipine">
+            <option value="Nitrofurantoin">
+            <option value="Nitroglycerin">
+            <option value="Norethindrone">
+            <option value="Nortriptyline">
+            <option value="Nystatin">
+            <option value="Olanzapine">
+            <option value="Olmesartan">
+            <option value="Omeprazole">
+            <option value="Ondansetron">
+            <option value="Oseltamivir">
+            <option value="Oxcarbazepine">
+            <option value="Oxybutynin">
+            <option value="Oxycodone">
+            <option value="Pantoprazole">
+            <option value="Paracetamol">
+            <option value="Paroxetine">
+            <option value="Penicillin">
+            <option value="Phenytoin">
+            <option value="Pioglitazone">
+            <option value="Polyethylene Glycol">
+            <option value="Potassium Chloride">
+            <option value="Pravastatin">
+            <option value="Prazosin">
+            <option value="Prednisolone">
+            <option value="Prednisone">
+            <option value="Pregabalin">
+            <option value="Prochlorperazine">
+            <option value="Progesterone">
+            <option value="Promethazine">
+            <option value="Propranolol">
+            <option value="Quetiapine">
+            <option value="Quinapril">
+            <option value="Rabeprazole">
+            <option value="Ramipril">
+            <option value="Ranitidine">
+            <option value="Risperidone">
+            <option value="Rivaroxaban">
+            <option value="Rpinirole">
+            <option value="Rosuvastatin">
+            <option value="Salmeterol">
+            <option value="Sertraline">
+            <option value="Sildenafil">
+            <option value="Simvastatin">
+            <option value="Sitagliptin">
+            <option value="Solifenacin">
+            <option value="Spironolactone">
+            <option value="Sulfamethoxazole">
+            <option value="Sumatriptan">
+            <option value="Tacrolimus">
+            <option value="Tadalafil">
+            <option value="Tamoxifen">
+            <option value="Tamsulosin">
+            <option value="Telmisartan">
+            <option value="Temazepam">
+            <option value="Terbinafine">
+            <option value="Theophylline">
+            <option value="Thyroid Extract">
+            <option value="Ticagrelor">
+            <option value="Timolol">
+            <option value="Tiotropium">
+            <option value="Tizanidine">
+            <option value="Tobramycin">
+            <option value="Topiramate">
+            <option value="Torsemide">
+            <option value="Tramadol">
+            <option value="Trazodone">
+            <option value="Triamcinolone">
+            <option value="Triamterene">
+            <option value="Trimethoprim">
+            <option value="Valacyclovir">
+            <option value="Valsartan">
+            <option value="Vancomycin">
+            <option value="Venlafaxine">
+            <option value="Verapamil">
+            <option value="Vitamin D3">
+            <option value="Warfarin">
+            <option value="Zolpidem">
+          </datalist>
+        </div>
+      </div>
+      <div class="demo-field">
+        <label>What time do you take it?</label>
+        <div class="time-row">
+          <select id="hourSel"></select>
+          <select id="minSel"></select>
+          <select id="ampmSel">
+            <option>AM</option><option>PM</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-add" onclick="addReminder()">Add Reminder</button>
+
+      <div class="reminder-list" id="reminderList">
+        <div class="reminder-empty" id="reminderEmpty">No reminders added yet.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Populate hour dropdown (1-12)
+  const hourSel = document.getElementById('hourSel');
+  for(let h = 1; h <= 12; h++){
+    const opt = document.createElement('option');
+    opt.value = h; 
+    opt.textContent = h;
+    hourSel.appendChild(opt);
+  }
+
+  // Populate minute dropdown with custom time options (00 to 59)
+  const minSel = document.getElementById('minSel');
+  for(let m = 0; m < 60; m++){
+    const opt = document.createElement('option');
+    const val = m < 10 ? '0' + m : m;
+    opt.value = val;
+    opt.textContent = val;
+    minSel.appendChild(opt);
+  }
+
+  function toggleDemo(){
+    const card = document.getElementById('demoCard');
+    const btn = document.getElementById('tryNowBtn');
+    card.classList.toggle('open');
+    if(card.classList.contains('open')){
+      btn.textContent = 'Hide';
+      card.scrollIntoView({behavior:'smooth', block:'nearest'});
+    } else {
+      btn.textContent = 'Try Now';
+    }
+  }
+
+  function addReminder(){
+    const med = document.getElementById('medName').value.trim();
+    const hour = document.getElementById('hourSel').value;
+    const min = document.getElementById('minSel').value;
+    const ampm = document.getElementById('ampmSel').value;
+
+    if(!med){
+      const input = document.getElementById('medName');
+      input.style.borderColor = '#FF6B6B';
+      input.placeholder = 'Enter a medicine name first';
+      setTimeout(()=>{ input.style.borderColor=''; }, 1500);
+      return;
+    }
+
+    const emptyMsg = document.getElementById('reminderEmpty');
+    if(emptyMsg) emptyMsg.remove();
+
+    const list = document.getElementById('reminderList');
+    const item = document.createElement('div');
+    item.className = 'reminder-item';
+    item.innerHTML = `<span class="med">${med}</span><span class="time">${hour}:${min} ${ampm}</span>`;
+    list.appendChild(item);
+
+    document.getElementById('medName').value = '';
+  }
+</script>
+
+<footer>
+  <div class="wrap">PULSE — Fusion Fest MedTech Track — SDG 9</div>
+</footer>
+
+</body>
+</html>
